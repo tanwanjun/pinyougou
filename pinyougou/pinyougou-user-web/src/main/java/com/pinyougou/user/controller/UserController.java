@@ -6,9 +6,13 @@ import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import com.pinyougou.vo.Result;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/user")
 @RestController
@@ -57,6 +61,20 @@ public class UserController {
                    e.printStackTrace();
                }
         return Result.fail("发送短信失败！");
+    }
+
+    /**
+     * 获取当前登录的用户名
+     * @return 用户信息
+     */
+    @GetMapping("/getUsername")
+    public Map<String, Object> getUsername(HttpServletRequest request){
+        Map<String, Object> map = new HashMap<String, Object>();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("username = " + request.getRemoteUser());
+        map.put("username", username);
+
+        return map;
     }
 
 }
